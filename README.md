@@ -202,3 +202,5 @@ Again, please look at the `wrslog.h` header file to see how all of this was impl
 I wrote this WellRestedSloth logger to be used in other future projects.  I designed it to be lightweight (no additional allocations on the stack), easily used (simply include a header file), easily compiled out for non-debug builds, and easily customizable.  It is more of a learning project that turned into an actual useful project.  I hope you find this logger useful in your projects!
 
 Now I must go back to sleep.  Good night. Zzzzzzz.....
+
+<p align="center" width="100%"><img src="https://github.com/user-attachments/assets/9304182f-24a0-4e66-afdb-a23b4efece28" width="75%" align="center"/></p>
