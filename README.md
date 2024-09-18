@@ -50,27 +50,17 @@ All development was done using Github Codespaces, using VS Code editor, compiled
    Several arguments:
 
    ```c
-   int a = 42;
-   WRSLOG_INFO( "This is an info log, count = %d, %d, %d", a, a+1, a+2 );
+   int a = 42, b = 43, c = 44;
+   WRSLOG_INFO( "This is an info log, count = %d, %d, %d", a, b, c );
    ```
 
-3. Enable logging in a debug build, or disable logging in a non-debug build.
+3. Logging is enabled by default.
 
-   To enable logging, set either variable `DEBUG` or `_DEBUG` to `1`:
+   To disable logging, set the variable `__WRSLOG_ENABLE`  to `0`.  This can be hard-coded in `wrslog.h`.  Alternatively, `__WRSLOG_DISABLE` can be defined during compilation.  For example:
 
-   1. In `wrslog.h` header file:
-
-      ```c
-      #define _DEBUG 1
-      ```
-
-   2. Or, add the variable during compilation:
-
-      ```shell
-      gcc -o myprog main.c -D_DEBUG=1
-      ```
-
-   If `DEBUG` or `_DEBUG` is not set to `1`, then the logging macros are "compiled out".
+   ```shell
+   gcc -o myprog main.c -D__WRSLOG_DISABLE
+   ```
 
 
 ## Documentation
@@ -112,21 +102,19 @@ Below is a description of the options that can be customized.
 - Enable or disable logging at compile time
 
   ```c
-  #define _DEBUG 1
+  #define __WRSLOG_ENABLE 1
   ```
 
-  - Set `_DEBUG` to 1 to enable logging.
-  - Set `_DEBUG` to 0 to disable logging.  All debug logs are compiled out.
-  - The `_DEBUG` flag can also be set during compilation.  For example, this method can be used in a Makefile to enable logging for debug builds, and disable logging for release builds.  Example:
+  - Set `__WRSLOG_ENABLE` to 1 to enable logging.
+  - Set `__WRSLOG_ENABLE` to 0 to disable logging.  All debug logs are compiled out.
+  - The `__WRSLOG_ENABLE` flag can also be conditionally set during compilation by adding `__WRSLOG_DISABLE` flag.  For example, this method can be used in a Makefile to enable logging for debug builds, and disable logging for release builds.  Example:
 
     ```shell
-    # Debug build
-    gcc -o myprog main.c -D_DEBUG=1
-
-    # Release build
-    gcc -o myprog main.c -D_DEBUG=0
-    # or remove the _DEBUG flag
+    # Debug build (logging enabled)
     gcc -o myprog main.c
+
+    # Release build (logging disabled)
+    gcc -o myprog main.c -D__WRSLOG_DISABLE
     ```
 
 - Set the target for the log output

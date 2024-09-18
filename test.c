@@ -27,16 +27,28 @@
 
 // Sample code to use logger functions.
 
-int main(int argc, char **argv)
+int main(void)
 {
-    WRSLOG_DEBUG( "debug %s", "testString" );
-    WRSLOG_INFO( "info %u, %s", __WRSLOG_LEVEL_INFO, __WRSLOG_LEVEL_INFO_STR );
-    WRSLOG_NOTICE( "notice 0x%x", 0xCAFEBEEF );
-    WRSLOG_WARNING( "warning %d", -12345 );
-    WRSLOG_ERR( "error" );
-    WRSLOG_CRIT( "critical " );
-    WRSLOG_ALERT( "alert" );
-    WRSLOG_EMERG( "emergency" );
+    int i = 100, j = 0xcafebeef;
+    float f = 3.14159;
+    char szTest[10];
+    snprintf( szTest, sizeof(szTest), "%s", "mystr" );
+
+    WRSLOG_DEBUG( "no args" );
+    WRSLOG_INFO( "1 arg: %d", i );
+    WRSLOG_NOTICE( "2 args: %s, 0x%08X", szTest, j );
+    WRSLOG_WARNING( "3 args: %f, %s, %d", f, szTest, i );
+
+    // Update vars to avoid release build warnings about unused variables
+    i += 400;
+    j -= 0xcafe0000;
+    f *= f;
+    snprintf( szTest, sizeof(szTest), "%s", "teststr2" );
+
+    WRSLOG_ERR( "no args" );
+    WRSLOG_CRIT( "1 arg: %d", i );
+    WRSLOG_ALERT( "2 args: %s, 0x%08X", szTest, j );
+    WRSLOG_EMERG( "3 args: %f, %s, %d", f, szTest, i );
 
     return 0;
 }

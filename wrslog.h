@@ -35,8 +35,12 @@
 // Customize the values in this section below. (Start)
 ///////////////////////////////////////////////////////////
 
-// Enable the debug logs (can be set here or during gcc compilation via -D)
-#define _DEBUG 1
+// Enable the logger unless __WRSLOG_DISABLE is defined
+#if defined(__WRSLOG_DISABLE)
+#define __WRSLOG_ENABLE 0
+#else
+#define __WRSLOG_ENABLE 1
+#endif
 
 // Set the logging target:
 #define __WRSLOG_TARGET stderr
@@ -164,7 +168,7 @@
 // Actual logging below.
 
 // Emergency level __WRSLOG_LEVEL_EMERG (0)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_EMERG)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_EMERG)
 #define WRSLOG_EMERG(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_YELLOW __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -175,7 +179,7 @@
 #endif
 
 // Alert level __WRSLOG_LEVEL_ALERT (1)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ALERT)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ALERT)
 #define WRSLOG_ALERT(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_MAGENTA __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -186,7 +190,7 @@
 #endif
 
 // Critical level __WRSLOG_LEVEL_CRIT (2)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_CRIT)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_CRIT)
 #define WRSLOG_CRIT(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_CYAN __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -197,7 +201,7 @@
 #endif
 
 // Error level __WRSLOG_LEVEL_ERR (3)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ERR)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ERR)
 #define WRSLOG_ERR(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_RED __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -208,7 +212,7 @@
 #endif
 
 // Warning level __WRSLOG_LEVEL_WARNING (4)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_WARNING)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_WARNING)
 #define WRSLOG_WARNING(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_MAGENTA __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -219,7 +223,7 @@
 #endif
 
 // Notice level __WRSLOG_LEVEL_NOTICE (5)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_NOTICE)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_NOTICE)
 #define WRSLOG_NOTICE(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_CYAN __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -230,7 +234,7 @@
 #endif
 
 // Informational level __WRSLOG_LEVEL_INFO (6)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_INFO)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_INFO)
 #define WRSLOG_INFO(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_GREEN __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
@@ -241,7 +245,7 @@
 #endif
 
 // Debug level __WRSLOG_LEVEL_DEBUG (7)
-#if ((DEBUG == 1) || (_DEBUG == 1)) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_DEBUG)
+#if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_DEBUG)
 #define WRSLOG_DEBUG(fmt, ...) do { \
     __WRSLOG_PRETAG \
     fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_WHITE __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
