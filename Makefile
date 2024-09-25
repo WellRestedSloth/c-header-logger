@@ -1,22 +1,24 @@
 ## Variables
-NAME	= testlog
-SRC		= \
+TESTEXE = testlog
+SRCS = \
 	test.c
 
-OBJ		= $(SRC:.c=.o)
-CFLAGS	= -g -Wall -Wextra
-LDLIBS	=
-CC		= gcc
+OBJS = $(SRCS:.c=.o)
+CPPFLAGS = -g -Wall -Wextra
+LDLIBS =
+CC = gcc
 
-## Rules
-$(NAME)	: $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDLIBS)
+.PHONY:	test $(TESTEXE) nolog clean
 
-default	: $(NAME)
+## Rules section
+
+## Link executable (default)
+$(TESTEXE)	: $(OBJS)
+	$(CC) $(OBJS) -o $(TESTEXE) $(LDLIBS)
 
 ## Disable logger for the "nolog" target
-nolog	: CFLAGS += -D__WRSLOG_DISABLE
-nolog	: $(NAME)
+nolog	: CPPFLAGS += -D__WRSLOG_DISABLE
+nolog	: $(TESTEXE)
 
 clean	:
-	rm -f $(OBJ) $(NAME)
+	rm -f $(OBJS) $(TESTEXE)
