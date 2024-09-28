@@ -1,0 +1,4 @@
+{
+    "name":"cpp:ubuntu-22.04 image, gcc 11.4.0",
+    "image":"mcr.microsoft.com/devcontainers/cpp:ubuntu-22.04"
+}

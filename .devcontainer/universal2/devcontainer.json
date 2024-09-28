@@ -1,0 +1,4 @@
+{
+    "name":"universal:2 image, gcc 9.4.0",
+    "image":"mcr.microsoft.com/devcontainers/universal:2"
+}

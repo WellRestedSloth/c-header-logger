@@ -1,0 +1,4 @@
+{
+    "name":"cpp:ubuntu-20.04 image, gcc 9.4.0",
+    "image":"mcr.microsoft.com/devcontainers/cpp:ubuntu-20.04"
+}
