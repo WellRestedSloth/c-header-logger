@@ -58,6 +58,16 @@
 //     1 for terminal ANSI colors
 #define __WRSLOG_COLOR 1
 
+// Set the colors for each log level:
+#define __WRSLOG_COLOR_EMERG    __WRSLOG_COLOR_BOLD_YELLOW
+#define __WRSLOG_COLOR_ALERT    __WRSLOG_COLOR_BOLD_MAGENTA
+#define __WRSLOG_COLOR_CRIT     __WRSLOG_COLOR_BOLD_CYAN
+#define __WRSLOG_COLOR_ERR      __WRSLOG_COLOR_BOLD_RED
+#define __WRSLOG_COLOR_WARNING  __WRSLOG_COLOR_MAGENTA
+#define __WRSLOG_COLOR_NOTICE   __WRSLOG_COLOR_CYAN
+#define __WRSLOG_COLOR_INFO     __WRSLOG_COLOR_GREEN
+#define __WRSLOG_COLOR_DEBUG    __WRSLOG_COLOR_WHITE
+
 // Set the time format:
 //     0 for custom format
 //     1 for ISO 8601 local time format
@@ -171,7 +181,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_EMERG)
 #define WRSLOG_EMERG(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_YELLOW __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_EMERG __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_EMERG,__WRSLOG_LEVEL_EMERG_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -182,7 +192,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ALERT)
 #define WRSLOG_ALERT(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_MAGENTA __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_ALERT __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_ALERT,__WRSLOG_LEVEL_ALERT_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -193,7 +203,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_CRIT)
 #define WRSLOG_CRIT(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_CYAN __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_CRIT __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_CRIT,__WRSLOG_LEVEL_CRIT_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -204,7 +214,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ERR)
 #define WRSLOG_ERR(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_BOLD_RED __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_ERR __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_ERR,__WRSLOG_LEVEL_ERR_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -215,7 +225,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_WARNING)
 #define WRSLOG_WARNING(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_MAGENTA __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_WARNING __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_WARNING,__WRSLOG_LEVEL_WARNING_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -226,7 +236,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_NOTICE)
 #define WRSLOG_NOTICE(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_CYAN __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_NOTICE __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_NOTICE,__WRSLOG_LEVEL_NOTICE_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -237,7 +247,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_INFO)
 #define WRSLOG_INFO(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_GREEN __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_INFO __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_INFO,__WRSLOG_LEVEL_INFO_STR), ##__VA_ARGS__);\
     } while(0)
 #else
@@ -248,7 +258,7 @@
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_DEBUG)
 #define WRSLOG_DEBUG(fmt, ...) do { \
     __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_WHITE __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_DEBUG __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
          __WRSLOG_POSTTAG(__WRSLOG_LEVEL_DEBUG,__WRSLOG_LEVEL_DEBUG_STR), ##__VA_ARGS__);\
     } while(0)
 #else

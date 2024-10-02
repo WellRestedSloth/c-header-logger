@@ -1,7 +1,7 @@
 # c-header-logger
 
 WellRestedSloth's (WRS) logger:
-A lightweight and customizable header file logger written in C.
+A lightweight and customizable single-file header logger written in C.
 
 ![github_logger](https://github.com/user-attachments/assets/428c443a-6378-4903-af49-8cc21f5cbfcb)
 
@@ -10,7 +10,6 @@ A lightweight and customizable header file logger written in C.
 
 - Date/timestamp (with millisecond granularity) format
 - Supports 8 different logging levels (based on Linux kernel log levels)
-- Supports debug/non-debug build profiles
 - Easily customizable:
   - Select log output format (supports ISO 8601 time format)
 	- Select log output destination (stdout or stderr)
@@ -19,10 +18,12 @@ A lightweight and customizable header file logger written in C.
   - Logger is implemented using the preprocessor in a single header file
   - No additional buffers allocated on the stack
 	- For non-debug builds, logging macros are compiled out
+- Supports disabling of logs (can be used for release builds)
 - Can be used in C and C++ programs
+- Implemented using a single header file.  Easy to add to your source code!
 - MIT license, so you can freely modify the source code to your liking!
 
-All development was done using Github Codespaces, using VS Code editor, compiled with gcc 9.4.
+All development was done using Github Codespaces, using VS Code editor.  Tested and working with gcc 9.4, 11.4, 13.2.
 
 
 ## Known Limitations
@@ -149,7 +150,21 @@ Below is a description of the options that can be customized.
 
   - Set `__WRSLOG_COLOR` to 1 to enable ANSI colors in the terminal
   - Set `__WRSLOG_COLOR` to 0 to disable ANSI colors in the terminal
-  - Please refer to the definitions of the actual WRSLOG macros to modify which color each log level will display.
+
+- Set the color for each log level
+
+  ```c
+  #define __WRSLOG_COLOR_EMERG    __WRSLOG_COLOR_BOLD_YELLOW
+  #define __WRSLOG_COLOR_ALERT    __WRSLOG_COLOR_BOLD_MAGENTA
+  #define __WRSLOG_COLOR_CRIT     __WRSLOG_COLOR_BOLD_CYAN
+  #define __WRSLOG_COLOR_ERR      __WRSLOG_COLOR_BOLD_RED
+  #define __WRSLOG_COLOR_WARNING  __WRSLOG_COLOR_MAGENTA
+  #define __WRSLOG_COLOR_NOTICE   __WRSLOG_COLOR_CYAN
+  #define __WRSLOG_COLOR_INFO     __WRSLOG_COLOR_GREEN
+  #define __WRSLOG_COLOR_DEBUG    __WRSLOG_COLOR_WHITE
+  ```
+
+  - The definitions of each color can be found in the `wrslog.h` file
 
 - Set the logging format
 
