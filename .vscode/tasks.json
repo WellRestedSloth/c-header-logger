@@ -14,13 +14,13 @@
             }
         },
         {
-            "label": "run make nolog",
+            "label": "run make remake",
             "type": "shell",
-            "command": "/usr/bin/make nolog",
+            "command": "/usr/bin/make remake",
             "problemMatcher": ["$gcc"],
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             }
         },
         {
