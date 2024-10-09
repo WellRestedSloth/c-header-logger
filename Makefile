@@ -12,63 +12,63 @@ SRCS = \
 	test.c
 OBJS = $(SRCS:.c=.o)
 HEADERS = wrslog.h
-LOGEXE = testlog
-NOLOGEXE = testnolog
+TESTEXE = testlog
+TESTEXE2 = testnolog
 
 #
 # log build settings
 #
-LOGDIR = logobj
-LOGOBJS = $(addprefix $(LOGDIR)/, $(OBJS))
-LOGCPPFLAGS = $(CPPFLAGS)
+OBJDIR = obj
+TESTOBJS = $(addprefix $(OBJDIR)/, $(OBJS))
+TESTCPPFLAGS = $(CPPFLAGS)
 
 #
 # nolog build settings
 #
-NOLOGDIR = nologobj
-NOLOGOBJS = $(addprefix $(NOLOGDIR)/, $(OBJS))
-NOLOGCPPFLAGS = $(CPPFLAGS) -D__WRSLOG_DISABLE
+OBJDIR2 = obj2
+TESTOBJS2 = $(addprefix $(OBJDIR2)/, $(OBJS))
+TESTCPPFLAGS2 = $(CPPFLAGS) -D__WRSLOG_DISABLE
 
-.PHONY: all clean prep test log nolog
+.PHONY: all prep remake clean test test2
 
 # Default build
-all: prep log nolog
+all: prep test test2
 
 #
 # log rules
 #
-log: prep
-log: $(LOGEXE)
-$(LOGEXE): $(LOGOBJS)
-	$(CC) $(LOGOBJS) -o $(LOGEXE) $(LDLIBS)
+test: prep
+test: $(TESTEXE)
+$(TESTEXE): $(TESTOBJS)
+	$(CC) $(TESTOBJS) -o $(TESTEXE) $(LDLIBS)
 
-$(LOGDIR)/%.o: prep
-$(LOGDIR)/%.o: %.c
-	$(CC) -c $(LOGCPPFLAGS) -o $@ $<
+$(OBJDIR)/%.o: prep
+$(OBJDIR)/%.o: %.c
+	$(CC) -c $(TESTCPPFLAGS) -o $@ $<
 
-$(LOGOBJS): $(HEADERS)
+$(TESTOBJS): $(HEADERS)
 
 #
 # nolog rules
 #
-nolog: prep
-nolog: $(NOLOGEXE)
-$(NOLOGEXE): $(NOLOGOBJS)
-	$(CC) $(NOLOGOBJS) -o $(NOLOGEXE) $(LDLIBS)
+test2: prep
+test2: $(TESTEXE2)
+$(TESTEXE2): $(TESTOBJS2)
+	$(CC) $(TESTOBJS2) -o $(TESTEXE2) $(LDLIBS)
 
-$(NOLOGDIR)/%.o: prep
-$(NOLOGDIR)/%.o: %.c
-	$(CC) -c $(NOLOGCPPFLAGS) -o $@ $<
+$(OBJDIR2)/%.o: prep
+$(OBJDIR2)/%.o: %.c
+	$(CC) -c $(TESTCPPFLAGS2) -o $@ $<
 
-$(NOLOGOBJS): $(HEADERS)
+$(TESTOBJS2): $(HEADERS)
 
 #
 # Other rules
 #
 prep:
-	@mkdir -p $(LOGDIR) $(NOLOGDIR)
+	@mkdir -p $(OBJDIR) $(OBJDIR2)
 
 remake: clean all
 
 clean:
-	rm -f $(LOGEXE) $(LOGOBJS) $(NOLOGEXE) $(NOLOGOBJS)
+	rm -f $(TESTEXE) $(TESTOBJS) $(TESTEXE2) $(TESTOBJS2)
