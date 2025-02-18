@@ -25,7 +25,50 @@
 // Must include WRS logger header
 #include "wrslog.h"
 
+#if defined(__WRSLOG_PTHREAD)
+
+#include <pthread.h>
+
 // Sample code to use logger functions.
+void *thread_func(void *arg)
+{
+    long thr = (long)arg;
+
+    const int NUM_LOOPS = 20;
+
+    for (int i=0; i<NUM_LOOPS; i++)
+    {
+        WRSLOG_DEBUG("thread = %ld, loop %d", thr, i);
+    }
+    return NULL;
+}
+
+int main(void)
+{
+    const int THREAD_COUNT = 20;
+    pthread_t tid[THREAD_COUNT];
+
+    WRSLOG_INFO("Begin");
+
+    for (long i = 0; i < THREAD_COUNT; i++)
+    {
+        pthread_create(&tid[i], NULL, thread_func, (void*)i);
+    }
+
+    for (int i = 0; i < THREAD_COUNT; i++)
+    {
+        if (0 == pthread_join(tid[i], NULL))
+        {
+            WRSLOG_INFO("joined thread %d", i);
+        }
+    }
+
+    WRSLOG_INFO("Done!");
+
+    return 0;
+}
+
+#else
 
 int main(void)
 {
@@ -52,3 +95,5 @@ int main(void)
 
     return 0;
 }
+
+#endif
