@@ -1,4 +1,4 @@
-# c-header-logger
+<h1><img src="https://github.com/user-attachments/assets/95adee91-78e7-4517-b444-4b844557a471" alt="sloth_abc" width="50" align="left"></img>c-header-logger</h1>
 
 WellRestedSloth's (WRS) logger:
 A lightweight and customizable single-file header logger written in C.
@@ -19,6 +19,7 @@ A lightweight and customizable single-file header logger written in C.
   - No additional buffers allocated on the stack
 	- For non-debug builds, logging macros are compiled out
 - Supports disabling of logs (can be used for release builds)
+- Supports multithreading (optional)
 - Can be used in C and C++ programs
 - Implemented using a single header file.  Easy to add to your source code!
 - MIT license, so you can freely modify the source code to your liking!
@@ -29,7 +30,6 @@ All development was done using Github Codespaces, using VS Code editor.  Tested 
 ## Known Limitations
 
 - No logging to file (future work)
-- No multithreaded support (future work)
 
 
 ## Using c-header-logger
@@ -108,7 +108,7 @@ Below is a description of the options that can be customized.
 
   - Set `__WRSLOG_ENABLE` to 1 to enable logging.
   - Set `__WRSLOG_ENABLE` to 0 to disable logging.  All debug logs are compiled out.
-  - The `__WRSLOG_ENABLE` flag can also be conditionally set during compilation by adding `__WRSLOG_DISABLE` flag.  For example, this method can be used in a Makefile to enable logging for debug builds, and disable logging for release builds.  Example:
+  - The `__WRSLOG_ENABLE` flag can also be conditionally set during compilation by adding `__WRSLOG_DISABLE` flag in the compile command.  For example, this method can be used in a Makefile to enable logging for debug builds, and disable logging for release builds.  Example:
 
     ```shell
     # Debug build (logging enabled)
@@ -117,6 +117,17 @@ Below is a description of the options that can be customized.
     # Release build (logging disabled)
     gcc -o myprog main.c -D__WRSLOG_DISABLE
     ```
+
+- Enable or disable multithreaded support at compile time
+
+  ```c
+  #define __WRSLOG_PTHREAD_ENABLE 1
+  ```
+
+  - Set `__WRSLOG_PTHREAD_ENABLE` to 1 to enable multithreading support. Each __WRSLOG macro is surrounded by a pthread mutex lock.
+  - Set `__WRSLOG_PTHREAD_ENABLE` to 0 to disable multithreading support (no pthread dependency)
+  - The `__WRSLOG_PTHREAD_ENABLE` flag can also be conditionally set during compilation by adding `__WRSLOG_PTHREAD` flag in the compile command.
+
 
 - Set the target for the log output
 
@@ -206,4 +217,10 @@ I wrote this WellRestedSloth logger to be used in other future projects.  I desi
 
 Now I must go back to sleep.  Good night. Zzzzzzz.....
 
-<p align="center" width="100%"><img src="https://github.com/user-attachments/assets/9304182f-24a0-4e66-afdb-a23b4efece28" width="75%" align="center"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/9304182f-24a0-4e66-afdb-a23b4efece28" alt="sleepy_sloth" width="75%" align="center"></img></p>
+<br clear="center">
+
+<p align="center"><img src="https://github.com/user-attachments/assets/95adee91-78e7-4517-b444-4b844557a471" alt="sloth_abc" width="50" align="left"></img></p>
+Part of WellRestedSloth's <b>Building Blocks</b> Series
+<br clear="left">
+
