@@ -25,6 +25,8 @@
 // Must include WRS logger header
 #include "wrslog.h"
 
+#include "test2.h"
+
 #if defined(__WRSLOG_PTHREAD)
 
 #include <pthread.h>
@@ -92,6 +94,8 @@ int main(void)
     WRSLOG_CRIT( "1 arg: %d", i );
     WRSLOG_ALERT( "2 args: %s, 0x%08X", szTest, j );
     WRSLOG_EMERG( "3 args: %f, %s, %d", f, szTest, i );
+
+    another_func(55, 66);
 
     return 0;
 }

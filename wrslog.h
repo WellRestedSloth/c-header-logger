@@ -184,19 +184,19 @@
 
 #if (__WRSLOG_PTHREAD_ENABLE && __WRSLOG_ENABLE)
     #include <pthread.h>
-    pthread_mutex_t g__WRSLOG_LOCK = PTHREAD_MUTEX_INITIALIZER;
+    static pthread_mutex_t wrslog_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 // Actual logging below.
 
 #if (__WRSLOG_PTHREAD_ENABLE)
-#define __WRSLOG_PTHREAD_PREAMBLE pthread_mutex_lock(&g__WRSLOG_LOCK)
+#define __WRSLOG_PTHREAD_PREAMBLE pthread_mutex_lock(&wrslog_mutex)
 #else
 #define __WRSLOG_PTHREAD_PREAMBLE
 #endif
 
 #if (__WRSLOG_PTHREAD_ENABLE)
-#define __WRSLOG_PTHREAD_POSTAMBLE pthread_mutex_unlock(&g__WRSLOG_LOCK)
+#define __WRSLOG_PTHREAD_POSTAMBLE pthread_mutex_unlock(&wrslog_mutex)
 #else
 #define __WRSLOG_PTHREAD_POSTAMBLE
 #endif
@@ -218,7 +218,7 @@
 #define WRSLOG_EMERG(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_EMERG, __WRSLOG_LEVEL_EMERG, __WRSLOG_LEVEL_EMERG_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_EMERG(fmt, ...) do {} while(0)
+#define WRSLOG_EMERG(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Alert level __WRSLOG_LEVEL_ALERT (1)
@@ -226,7 +226,7 @@
 #define WRSLOG_ALERT(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_ALERT, __WRSLOG_LEVEL_ALERT, __WRSLOG_LEVEL_ALERT_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_ALERT(fmt, ...) do {} while(0)
+#define WRSLOG_ALERT(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Critical level __WRSLOG_LEVEL_CRIT (2)
@@ -234,7 +234,7 @@
 #define WRSLOG_CRIT(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_CRIT, __WRSLOG_LEVEL_CRIT, __WRSLOG_LEVEL_CRIT_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_CRIT(fmt, ...) do {} while(0)
+#define WRSLOG_CRIT(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Error level __WRSLOG_LEVEL_ERR (3)
@@ -242,7 +242,7 @@
 #define WRSLOG_ERR(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_ERR, __WRSLOG_LEVEL_ERR, __WRSLOG_LEVEL_ERR_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_ERR(fmt, ...) do {} while(0)
+#define WRSLOG_ERR(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Warning level __WRSLOG_LEVEL_WARNING (4)
@@ -250,7 +250,7 @@
 #define WRSLOG_WARNING(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_WARNING, __WRSLOG_LEVEL_WARNING, __WRSLOG_LEVEL_WARNING_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_WARNING(fmt, ...) do {} while(0)
+#define WRSLOG_WARNING(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Notice level __WRSLOG_LEVEL_NOTICE (5)
@@ -258,7 +258,7 @@
 #define WRSLOG_NOTICE(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_NOTICE, __WRSLOG_LEVEL_NOTICE, __WRSLOG_LEVEL_NOTICE_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_NOTICE(fmt, ...) do {} while(0)
+#define WRSLOG_NOTICE(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Informational level __WRSLOG_LEVEL_INFO (6)
@@ -266,7 +266,7 @@
 #define WRSLOG_INFO(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_INFO, __WRSLOG_LEVEL_INFO, __WRSLOG_LEVEL_INFO_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_INFO(fmt, ...) do {} while(0)
+#define WRSLOG_INFO(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 // Debug level __WRSLOG_LEVEL_DEBUG (7)
@@ -274,7 +274,7 @@
 #define WRSLOG_DEBUG(fmt, ...) \
     __WRSLOG_LOG(__WRSLOG_COLOR_DEBUG, __WRSLOG_LEVEL_DEBUG, __WRSLOG_LEVEL_DEBUG_STR, fmt, ##__VA_ARGS__)
 #else
-#define WRSLOG_DEBUG(fmt, ...) do {} while(0)
+#define WRSLOG_DEBUG(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
 #endif // __WRSLOG_H__

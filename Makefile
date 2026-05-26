@@ -9,7 +9,8 @@ LDLIBS =
 # Project files
 #
 SRCS = \
-	test.c
+	test.c \
+	test2.c
 OBJS = $(SRCS:.c=.o)
 HEADERS = wrslog.h
 TESTEXE = testlog
