@@ -80,7 +80,7 @@
 //     1 for ISO 8601 local time format
 //         Example for PDT:
 //         [YYYY-MM-DDThh:mm:ss.msec-0700]
-#define __WRSLOG_ISO8601 0
+#define __WRSLOG_ISO8601 1
 
 // Set __WRSLOG_PRETAG, __WRSLOG_TAG, __WRSLOG_POSTTAG to be passed into fprintf():
 //     __WRSLOG_PRETAG;
@@ -101,7 +101,7 @@
 #define __WRSLOG_POSTTAG(lvlnum, lvlstr) \
     _tm.tm_year+1900, _tm.tm_mon+1, _tm.tm_mday, \
     _tm.tm_hour, _tm.tm_min, _tm.tm_sec, _ts.tv_nsec/(1000*1000), \
-    (-1*_tm.tm_gmtoff)/3600, (_tm.tm_gmtoff<0?((-1*_tm.tm_gmtoff)%3600)/60:(_tm.tm_gmtoff%3600)/60), \
+    _tm.tm_gmtoff/3600, (_tm.tm_gmtoff < 0 ? -_tm.tm_gmtoff : _tm.tm_gmtoff)%3600/60, \
     __WRSLOG_MODULE, lvlnum, lvlstr, \
     __FILE__, __func__, __LINE__
 
@@ -201,107 +201,78 @@
 #define __WRSLOG_PTHREAD_POSTAMBLE
 #endif
 
+#define __WRSLOG_BODY(color, lvlnum, lvlstr, fmt, ...) \
+    __WRSLOG_PRETAG \
+    fprintf(__WRSLOG_TARGET, color __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
+        __WRSLOG_POSTTAG(lvlnum, lvlstr), ##__VA_ARGS__);
+
+#define __WRSLOG_LOG(color, lvlnum, lvlstr, fmt, ...) do { \
+    __WRSLOG_PTHREAD_PREAMBLE; \
+    __WRSLOG_BODY(color, lvlnum, lvlstr, fmt, ##__VA_ARGS__) \
+    __WRSLOG_PTHREAD_POSTAMBLE; \
+    } while(0)
+
 
 // Emergency level __WRSLOG_LEVEL_EMERG (0)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_EMERG)
-#define WRSLOG_EMERG(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_EMERG __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_EMERG,__WRSLOG_LEVEL_EMERG_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    } while(0)
+#define WRSLOG_EMERG(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_EMERG, __WRSLOG_LEVEL_EMERG, __WRSLOG_LEVEL_EMERG_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_EMERG(fmt, ...) do {} while(0)
 #endif
 
 // Alert level __WRSLOG_LEVEL_ALERT (1)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ALERT)
-#define WRSLOG_ALERT(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_ALERT __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_ALERT,__WRSLOG_LEVEL_ALERT_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_POSTAMBLE; \
-    } while(0)
+#define WRSLOG_ALERT(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_ALERT, __WRSLOG_LEVEL_ALERT, __WRSLOG_LEVEL_ALERT_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_ALERT(fmt, ...) do {} while(0)
 #endif
 
 // Critical level __WRSLOG_LEVEL_CRIT (2)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_CRIT)
-#define WRSLOG_CRIT(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_CRIT __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_CRIT,__WRSLOG_LEVEL_CRIT_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    } while(0)
+#define WRSLOG_CRIT(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_CRIT, __WRSLOG_LEVEL_CRIT, __WRSLOG_LEVEL_CRIT_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_CRIT(fmt, ...) do {} while(0)
 #endif
 
 // Error level __WRSLOG_LEVEL_ERR (3)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_ERR)
-#define WRSLOG_ERR(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_ERR __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_ERR,__WRSLOG_LEVEL_ERR_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_POSTAMBLE; \
-    } while(0)
+#define WRSLOG_ERR(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_ERR, __WRSLOG_LEVEL_ERR, __WRSLOG_LEVEL_ERR_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_ERR(fmt, ...) do {} while(0)
 #endif
 
 // Warning level __WRSLOG_LEVEL_WARNING (4)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_WARNING)
-#define WRSLOG_WARNING(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_WARNING __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_WARNING,__WRSLOG_LEVEL_WARNING_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_POSTAMBLE; \
-    } while(0)
+#define WRSLOG_WARNING(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_WARNING, __WRSLOG_LEVEL_WARNING, __WRSLOG_LEVEL_WARNING_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_WARNING(fmt, ...) do {} while(0)
 #endif
 
 // Notice level __WRSLOG_LEVEL_NOTICE (5)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_NOTICE)
-#define WRSLOG_NOTICE(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_NOTICE __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_NOTICE,__WRSLOG_LEVEL_NOTICE_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_POSTAMBLE; \
-    } while(0)
+#define WRSLOG_NOTICE(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_NOTICE, __WRSLOG_LEVEL_NOTICE, __WRSLOG_LEVEL_NOTICE_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_NOTICE(fmt, ...) do {} while(0)
 #endif
 
 // Informational level __WRSLOG_LEVEL_INFO (6)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_INFO)
-#define WRSLOG_INFO(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_INFO __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-        __WRSLOG_POSTTAG(__WRSLOG_LEVEL_INFO,__WRSLOG_LEVEL_INFO_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_POSTAMBLE; \
-    } while(0)
+#define WRSLOG_INFO(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_INFO, __WRSLOG_LEVEL_INFO, __WRSLOG_LEVEL_INFO_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_INFO(fmt, ...) do {} while(0)
 #endif
 
 // Debug level __WRSLOG_LEVEL_DEBUG (7)
 #if (__WRSLOG_ENABLE) && (__WRSLOG_LEVEL >= __WRSLOG_LEVEL_DEBUG)
-#define WRSLOG_DEBUG(fmt, ...) do { \
-    __WRSLOG_PTHREAD_PREAMBLE; \
-    __WRSLOG_PRETAG; \
-    fprintf(__WRSLOG_TARGET, __WRSLOG_COLOR_DEBUG __WRSLOG_TAG fmt __WRSLOG_COLOR_RESET "\n", \
-         __WRSLOG_POSTTAG(__WRSLOG_LEVEL_DEBUG,__WRSLOG_LEVEL_DEBUG_STR), ##__VA_ARGS__);\
-    __WRSLOG_PTHREAD_POSTAMBLE; \
-    } while(0)
+#define WRSLOG_DEBUG(fmt, ...) \
+    __WRSLOG_LOG(__WRSLOG_COLOR_DEBUG, __WRSLOG_LEVEL_DEBUG, __WRSLOG_LEVEL_DEBUG_STR, fmt, ##__VA_ARGS__)
 #else
 #define WRSLOG_DEBUG(fmt, ...) do {} while(0)
 #endif
