@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2025 Walrus Ted Sloth
+// Copyright (c) 2025-2026 Walrus Ted Sloth
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,8 @@
 // wrslog.h - WellRestedSloth logger
 // Header-only C logging utility.
 
-#ifndef __WRSLOG_H__
-#define __WRSLOG_H__
+#ifndef WRSLOG_H__
+#define WRSLOG_H__
 
 #include <stdio.h>
 #include <time.h>
@@ -277,4 +277,4 @@
 #define WRSLOG_DEBUG(fmt, ...) do { if(0) fprintf(__WRSLOG_TARGET, fmt, ##__VA_ARGS__); } while(0)
 #endif
 
-#endif // __WRSLOG_H__
+#endif // WRSLOG_H__
